@@ -1,1 +1,258 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Birdy Jump</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #222; overflow: hidden; touch-action: manipulation; font-family: Arial, sans-serif; }
+  body { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  canvas { background: #70c5ce; display: block; }
+</style>
+</head>
+<body>
+<canvas id="c" width="360" height="600"></canvas>
+<script>
+const FACE_DATA = "data:image/jpeg;base64,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";
+const TAP1_DATA = "data:audio/mpeg;base64,//MoxAAMCAalT0AYAD2glQCIDhcEAQdPiAEHcH3rB8HwfPxACAIAmH4IfLg+D9AP/ggc/UCDv+6XA//+D6q/CXhPzlZC31Hw//MoxAoOsXq4AYFQAGeQFqHEg2dKjpI+7UlB29Ec92X6OFA9eIklUrsPjpuMgnUSug117SrqNWJrffZ6flYbbWaK2yC2gem6//MoxAoOaGsGX8IQAjySizEBiL0w75fDEw6nvD/q9HlKrf/qCy3/QFocg/IbaUEwiXC5oVIEz8BiBCgTfQD77ztHdgQ1AFR///MoxAsOiYLdkgGibH2NZVEY8A3gj4tg7hzTpOs6S/Wmpak29/U//0Hr/WcTZJWOsZtI6D4/r//4PmrEqgD4HniECQmAgTbN//MoxAsPOYbtvABoYv5qBUeBl1Q2xFBlyeJ4gYkw9VtzArldJmrOnTY56T////61JiIjqLqX5P+/+/9T//8jAGs0C2sLcmEx//MoxAkPCX8CXgIOTvTA6OQy7fzuKRJYu39tB4mERw0MpVfNGp6MZ/9Lf/mjoC3eDbvnRJ8sDRN3z39/6RKFdCoDevqq+ID+//MoxAcM0OrWWAsQhDjuBzjIHxAJAHJf94gVEVp9DyFAXBufXwys0myKlCtlwfP/3WffiddvTbIGagBY5IrYGS1h/7mFNlaB//MoxA4PgkL6XoAFgkgzoio4TKcc4mkaqR/UmLkKxqlfdrfzpNpX+j9O7duzP//9CF//+gQ1/wiz+YMfmwOAZ1AkLXa/7EID//MoxAsM6ULFlAIKUNDUmrlyo7Z1dkAYCiv+/8xS3//1QWGP+qUWEn/5IKv/lWkfSy9n8shVA/6vs7LnoAH6s6Ik0zcIAKiO//MoxBIMsKbWX0dQAEX0fqayrMMD0OiJdQ3iAIh3/UJf4IE1jXIVpi4iqt7IdaqfRtVE3TCZuSJDNolT0UUVsRgDCL49wH4e//MoxBoSeh6oAY1oAHMTVEpa2JQ0L6hJEa0TIS431SVb/33sbesnL/mqn6GjrQ3//TSS/ZR1X/0394sBULjH1LYodVjSJFMh//MoxAsMQMYAAclIAAReQilyyJ5UUvIRSzSLUIpmKQyS4s14+KFkNFgZ///Jf//4i//uTEFNRTMuMTAwqqqqqqqqqqqqqqqq";
+const TAP2_DATA = "data:audio/mpeg;base64,//MoxAALyDaUaUYYABGDi7TvWggQCyZNMHwfNSnWD8uH+H/BA4s//wQqDH5QMf+XB+IHBj8EIIf1A+/1Kv//wz/f/3ENwL1j//MoxAsPubLtlYcQAILzBEhKzxyT/5vIuFR+mlFTmci+t3yk/v+x3bsdU+/Jc4E5t0VA/yn1s8uLZF7NBNnx45fCaa163ayQ//MoxAcOeJsiX8YYAgH3/84uhwIR/azI59tjKsmiFTgCB0RAAtRwCSUc1ij8dpQJCSjVNH80AVOr/+vRm2LV0JJGV/qFYlUh//MoxAgO4NbYyBPGWKdbPv+za9orl87FKIWOMyJYKpXSvWFpoUCvZ9azKtikCi3b/++6/b+yCoaX///FJtb7ogpiIeAXrJF///MoxAcNQNriMkPExP6rsKhBa5PqtZLqcnITtP/9LhStr+7kEO8UIfhj931j6T3//8gJxKozrPhoTAUDW4DnbbWEU/QkB+JU//MoxA0PcQsKPALOLpdn+hARm/nQECKY39XGg4cn/ceALZwwFD4cyAOAqL9ktD0LErv9b/EAeHAUNLCT8FYDR4Rm43OH7oJZ//MoxAoOGWcGPGhHZoEFrq/UOwu/+syTnv5mFvCmHRBab/vMLm8kMUzXiBCH2VgP5//ygfBR/iL/z6k1ACXBMnQguAgMt6/C//MoxAwNCRbmNAAKBEDHMr/xEc9jv0FmAY4r/y+zB0IOEX3keod+LO9nyIzTMf9QiUQd1/QqAJNphGU3JJ9nmutKrbt0X5wC//MoxBIMuc7rGAGENEnCto/Cvov7KR///coMZmk/6J+vWvpf6D0P///91JdEMQNL8mzksNI80AocU82z3dWGO1Gq73q/zyMC//MoxBoMWMraUgIEMAWC9n4vsu9N3VZYate33fXr4x6TDqztagAMNtZHCB+HGh6us8YjFBMFtaKJu+pR4p90DnXIFBUKD69z//MoxCMMuUb2WANQeO/+T/m0MqYQgwsWlz+3/9cAhjjLMnDD9H1oPqGMe69EDINymsYuT0EjJ0K3mCXuIij80Wdt4ryuHhYZ//MoxCsMuUru8lPK4DrKj/7ZXlckA+nD+/BaB/ZapUgA8dUBGP1fp1IoACDkqMSHpOvL8iGxpRQIGDD///+Qs/85+LULGPhv//MoxDMLqLsWNjgEppgvRE/j1WmjiAyLDS7aVWVpmJtaZAoE3/v5SoDBshfMW/lyCxE/VTwW/6A50gAKZpcRXdRgAI9HWoOF//MoxD8MOaLkwgIEfBkZmeOX//DEyqrfkajJ/wwEj533qKhNyW4wPBU6QSb//5BmLKRVAH2uskltGHEhIyCla5qvPWA5L7ua//MoxEkMyPbq/gBGSD2RAXoHhB/JmWABznzn5ZniY////0///1oARyRoARkRgf/ZAn8pYDtf+yFFX768/r+exR2dZDFowd1r//MoxFALaL8KXgDEVlX1ncif8l2T////539s5mSxFOc+eggMAnJgd6n+9dUAACQSSSSRyKNSORSAD/8eZeFjl/miMZQyhJqr//MoxF0QCqLSX0EQAAqRUSgqKFP80Vc3mjh0cB4P/WivhpiIILUWcJso7/uvoYybTAw6ILE/G1+y7bzNTLvzXESorQwOcVx8//MoxFcYMjb6X4JAAou5gXFxGKB4nlUgAAQAMH/ApfQSVMkjM9+YpCSk3/HKJsZF4vf+J8ViyY8Dq1f8HUHoOSSJRLo7f/8s//MoxDEXEqI14YVoARxDuI4lono8A5Qn3//5DHCJ6UDNRdHcZHxGS7/6X/9lmLE0kTxJF46PxkUVTEFNRTMuMTAwVVVVVVVV//MoxA8AAANIAcAAAFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV";
+const OUT_DATA  = "data:audio/mpeg;base64,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";
 
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const W = cv.width, H = cv.height;
+const GROUND = 70;
+
+function fit() {
+  const s = Math.min(innerWidth / W, innerHeight / H);
+  cv.style.width = W * s + 'px';
+  cv.style.height = H * s + 'px';
+}
+addEventListener('resize', fit); fit();
+
+// ---- Face ----
+let face = null;
+(function () {
+  const img = new Image();
+  img.onload = () => { face = img; };
+  img.src = FACE_DATA;
+})();
+
+// ---- Sounds ----
+const tapSnds = [new Audio(TAP1_DATA), new Audio(TAP2_DATA)];
+const outSnd = new Audio(OUT_DATA);
+[...tapSnds, outSnd].forEach(a => { a.preload = 'auto'; a.load(); });
+function play(a) {
+  try { a.cloneNode().play().catch(() => {}); } catch (e) {}
+}
+
+// 2-3 tap sound 1, phir 2-3 tap sound 2, phir repeat
+let tapIdx = 0, tapLeft = 2 + (Math.random() < 0.5 ? 1 : 0);
+function playTap() {
+  play(tapSnds[tapIdx]);
+  if (--tapLeft <= 0) {
+    tapIdx = 1 - tapIdx;
+    tapLeft = 2 + (Math.random() < 0.5 ? 1 : 0);
+  }
+}
+
+// ---- Settings ----
+const GRAVITY = 0.45;
+const FLAP = -7.5;
+const PIPE_W = 60;
+const GAP = 150;
+const PIPE_SPEED = 2.4;
+const PIPE_EVERY = 95;
+
+// ---- State ----
+let bird, pipes, score, best = 0, frame, state, groundX = 0, overTimer = 0;
+try { best = +localStorage.getItem('birdyBest') || 0; } catch (e) {}
+
+function reset() {
+  bird = { x: 90, y: H / 2 - 30, vy: 0, r: 16, rot: 0 };
+  pipes = [];
+  score = 0;
+  frame = 0;
+  tapIdx = 0; tapLeft = 2 + (Math.random() < 0.5 ? 1 : 0);
+  state = 'ready';
+}
+reset();
+
+function flap() {
+  if (state === 'ready') state = 'play';
+  if (state === 'play') { bird.vy = FLAP; playTap(); }
+  else if (state === 'over' && overTimer <= 0) reset();
+}
+
+addEventListener('keydown', e => {
+  if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); flap(); }
+});
+cv.addEventListener('pointerdown', e => { e.preventDefault(); flap(); });
+
+function addPipe() {
+  const min = 80, max = H - GROUND - GAP - 70;
+  pipes.push({ x: W, top: Math.random() * (max - min) + min, passed: false });
+}
+
+function die() {
+  if (state === 'over') return;
+  state = 'over';
+  overTimer = 30;
+  play(outSnd);
+  if (score > best) {
+    best = score;
+    try { localStorage.setItem('birdyBest', best); } catch (e) {}
+  }
+}
+
+function update() {
+  if (state !== 'over') groundX = (groundX - PIPE_SPEED) % 24;
+  if (overTimer > 0) overTimer--;
+
+  if (state === 'ready') {
+    bird.y = H / 2 - 30 + Math.sin(frame / 10) * 8;
+    frame++;
+    return;
+  }
+
+  bird.vy += GRAVITY;
+  bird.y += bird.vy;
+  bird.rot = Math.max(-0.5, Math.min(1.2, bird.vy / 10));
+
+  if (state === 'play') {
+    frame++;
+    if (frame % PIPE_EVERY === 1) addPipe();
+    for (const p of pipes) {
+      p.x -= PIPE_SPEED;
+      if (!p.passed && p.x + PIPE_W < bird.x) { p.passed = true; score++; }
+      const inX = bird.x + bird.r - 3 > p.x && bird.x - bird.r + 3 < p.x + PIPE_W;
+      if (inX && (bird.y - bird.r + 3 < p.top || bird.y + bird.r - 3 > p.top + GAP)) die();
+    }
+    pipes = pipes.filter(p => p.x > -PIPE_W - 10);
+    if (bird.y - bird.r < 0) { bird.y = bird.r; bird.vy = 0; }
+  }
+
+  if (bird.y + bird.r >= H - GROUND) {
+    bird.y = H - GROUND - bird.r;
+    if (state === 'play') die();
+    bird.vy = 0;
+  }
+}
+
+// ---- Drawing ----
+function drawCloud(x, y) {
+  ctx.fillStyle = 'rgba(255,255,255,.7)';
+  ctx.beginPath();
+  ctx.arc(x, y, 18, 0, 7); ctx.arc(x + 20, y - 8, 22, 0, 7); ctx.arc(x + 42, y, 16, 0, 7);
+  ctx.fill();
+}
+
+function bamboo(x, y0, y1) {
+  const h = y1 - y0;
+  if (h <= 0) return;
+  ctx.fillStyle = '#7cb342';
+  ctx.fillRect(x, y0, PIPE_W, h);
+  ctx.fillStyle = 'rgba(255,255,255,.25)';
+  ctx.fillRect(x + 8, y0, 8, h);
+  ctx.fillStyle = 'rgba(0,0,0,.15)';
+  ctx.fillRect(x + PIPE_W - 12, y0, 12, h);
+  ctx.fillStyle = '#558b2f';
+  for (let y = y0 + 20; y < y1 - 6; y += 48) ctx.fillRect(x - 3, y, PIPE_W + 6, 8);
+  ctx.strokeStyle = '#33691e';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(x, y0, PIPE_W, h);
+}
+
+function drawPipe(p) {
+  bamboo(p.x, -4, p.top);
+  bamboo(p.x, p.top + GAP, H - GROUND);
+}
+
+function drawBird() {
+  ctx.save();
+  ctx.translate(bird.x, bird.y);
+  ctx.rotate(bird.rot);
+
+  if (face) {
+    const R = bird.r + 11;
+    ctx.save();
+    ctx.beginPath(); ctx.arc(0, 0, R, 0, 7); ctx.clip();
+    const s = Math.max(2 * R / face.width, 2 * R / face.height);
+    ctx.drawImage(face, -face.width * s / 2, -face.height * s / 2, face.width * s, face.height * s);
+    ctx.restore();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(0, 0, R, 0, 7); ctx.stroke();
+    const w = state === 'play' && bird.vy < 0 ? -8 : 4;
+    ctx.fillStyle = '#e8573d';
+    ctx.beginPath(); ctx.ellipse(-R + 2, w, 9, 5, -0.4, 0, 7); ctx.fill();
+  } else {
+    ctx.fillStyle = '#e8573d';
+    ctx.beginPath(); ctx.arc(0, 0, bird.r, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#7a2615'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = '#ffd9b0';
+    ctx.beginPath(); ctx.ellipse(2, 5, 8, 6, 0, 0, 7); ctx.fill();
+    const w = state === 'play' && bird.vy < 0 ? -6 : 3;
+    ctx.fillStyle = '#b8381f';
+    ctx.beginPath(); ctx.ellipse(-4, w, 8, 5, -0.3, 0, 7); ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(7, -5, 5, 0, 7); ctx.fill();
+    ctx.fillStyle = '#000';
+    ctx.beginPath(); ctx.arc(9, -5, 2.2, 0, 7); ctx.fill();
+    ctx.fillStyle = '#ffb300';
+    ctx.beginPath(); ctx.moveTo(13, -1); ctx.lineTo(24, 3); ctx.lineTo(13, 7); ctx.closePath(); ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawGround() {
+  ctx.fillStyle = '#ded895';
+  ctx.fillRect(0, H - GROUND, W, GROUND);
+  ctx.fillStyle = '#8bc34a';
+  ctx.fillRect(0, H - GROUND, W, 14);
+  ctx.fillStyle = '#6fa33a';
+  for (let x = groundX; x < W; x += 24) ctx.fillRect(x, H - GROUND, 12, 14);
+}
+
+function text(t, x, y, size, color = '#fff') {
+  ctx.font = `bold ${size}px "Trebuchet MS", Arial, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.lineWidth = size / 6;
+  ctx.strokeStyle = '#000';
+  ctx.strokeText(t, x, y);
+  ctx.fillStyle = color;
+  ctx.fillText(t, x, y);
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  drawCloud(60, 110); drawCloud(240, 70); drawCloud(170, 200);
+  pipes.forEach(drawPipe);
+  drawGround();
+  drawBird();
+
+  if (state === 'play') text(score, W / 2, 80, 48);
+
+  if (state === 'ready') {
+    text('Birdy Jump', W / 2, 150, 44, '#ffeb3b');
+    text('Tap / Space dabao', W / 2, 400, 24);
+    text('Best: ' + best, W / 2, 440, 20);
+  }
+
+  if (state === 'over') {
+    ctx.fillStyle = 'rgba(0,0,0,.35)';
+    ctx.fillRect(0, 0, W, H);
+    text('Game Over', W / 2, 200, 46, '#ff5252');
+    text('Score: ' + score, W / 2, 270, 30);
+    text('Best: ' + best, W / 2, 315, 30, '#ffeb3b');
+    if (overTimer <= 0) text('Tap karo dobara khelne ke liye', W / 2, 390, 18);
+  }
+}
+
+(function loop() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
